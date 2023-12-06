@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>W3.CSS Template</title>
+  <title>Resume</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -72,6 +72,10 @@
       <i class="fa-solid fa-ghost fa-2xl"></i>
       <p>A P I</p>
     </a>
+    <a href="#Chart" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
+      <i class="fa-solid fa-chart-simple fa-2xl"></i>
+      <p>Chart</p>
+    </a>
   </nav>
 
   <!-- Navbar on small screens (Hidden on medium and large screens) -->
@@ -89,7 +93,7 @@
     <!-- Header/Home -->
     <header class="w3-container w3-padding-32 w3-center w3-black" id="home">
       <h1 class="w3-jumbo"><span class="w3-hide-small">I'm</span> Tharanun</h1>
-      <p>Web Developer.</p>
+      <p>Student</p>
       <img src="./img/bg-img.jpg" alt="boy" class="w3-image" width="992" height="1108">
     </header>
 
@@ -182,7 +186,55 @@
 
       <!-- END PAGE CONTENT -->
     </div>
-
+    <div>
+      <h1 id="Chart">ประชากรในแต่ละประเทศ</h1>
+      <canvas id="myChart" style="width: 500px; height: 500px;"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        fetch('https://raw.githubusercontent.com/samayo/country-json/master/src/country-by-population.json')
+          .then(response => response.json())
+          .then(data => {
+            const countries = data.map(country => country.country);
+            const populations = data.map(country => country.population);
+    
+            const lineColor = "#b91d47";
+    
+            new Chart("myChart", {
+              type: "line",
+              data: {
+                labels: countries,
+                datasets: [{
+                  label: 'Population',
+                  data: populations,
+                  borderColor: lineColor,
+                  fill: false
+                }]
+              },
+              options: {
+                title: {
+                  display: true,
+                  text: "World Population by Country (Line Chart)"
+                }
+              }
+            });
+          })
+          .catch(error => console.error('เกิดข้อผิดพลาด: ', error));
+      });
+    </script>    
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          fetch('https://raw.githubusercontent.com/samayo/country-json/master/src/country-by-population.json')
+            .then(response => response.json())
+            .then(data => {
+              // นำข้อมูลมาใช้ต่อไปตามต้องการ
+              console.log(data);
+            })
+            .catch(error => console.error('เกิดข้อผิดพลาด: ', error));
+        });
+      </script>
+      
 </body>
 
 </html>
