@@ -171,7 +171,26 @@
 
         <!-- End Contact Section -->
       </div>
-
+    </div>
+    <div>
+      <h1 id="Chart">ประชากรในแต่ละประเทศ</h1>
+      <canvas id="myChart" style="width: 500px; height: 500px;"></canvas>
+    </div>
+    <div>
+      <form method="POST" action="https://script.google.com/macros/s/AKfycbziW0cC2_tTU3uULhwqj3OQ9UL1bOz5tceMr-khshPFz9qj3A8VleiHVBTI56HlLkCxOQ/exec">
+        <input name="Email" type="email" placeholder="Email" required>
+        <input name="Name" type="text" placeholder="Name" required>
+        <input name="Topic" type="text" placeholder="Topic" required>
+        <button type="submit">Send</button>
+      </form>
+      <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS5LxC34YWDbXNh2Vx9bngg3sa4Jlc-OpXW384pgtEMlqjVmkDTY5n_OGhpXkWcNhtdK7CJZv9ij6ES/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false" width="650px" height="500px"></iframe>
+    </div>
+    <div>
+      <div class="center">
+        <div class="w3-center w3-padding-24">
+          <table id="btc_table"></table>
+      </div>
+    </div>
       <!-- Footer -->
       <footer class="w3-content w3-padding-64 w3-text-grey w3-xlarge">
         <i class="fa-brands fa-square-facebook"></i>
@@ -180,16 +199,11 @@
         <i class="fa-brands fa-square-youtube"></i>
         <i class="fa-brands fa-square-github"></i>
         <p class="w3-medium">Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank"
-            class="w3-hover-text-green">w3.css</a></p>
+        class="w3-hover-text-green">w3.css</a></p>
         <!-- End footer -->
       </footer>
-
+      
       <!-- END PAGE CONTENT -->
-    </div>
-    <div>
-      <h1 id="Chart">ประชากรในแต่ละประเทศ</h1>
-      <canvas id="myChart" style="width: 500px; height: 500px;"></canvas>
-    </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function() {
@@ -234,7 +248,71 @@
             .catch(error => console.error('เกิดข้อผิดพลาด: ', error));
         });
       </script>
-      
+      <script>
+        function w3_open() {
+          document.getElementById("mySidebar").style.display = "block";
+          document.getElementById("myOverlay").style.display = "block";
+        }
+    
+        function w3_close() {
+          document.getElementById("mySidebar").style.display = "none";
+          document.getElementById("myOverlay").style.display = "none";
+        }
+    
+        function CatFact() {
+          fetch("https://catfact.ninja/fact")
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (data) {
+              let txt = "";
+              for (let x in data) {
+                txt += data[x] + " ";
+                document.getElementById("textCat").innerHTML = txt;
+              }
+    
+              return data;
+            });
+        }
+    
+        function ZipLine() {
+          let zipCode = document.getElementById("zipCode").value;
+          fetch(`https://api.zippopotam.us/th/${zipCode}`)
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (data) {
+              let txt = JSON.stringify(data, null, 2);
+              document.getElementById("locatiobZip").innerHTML = txt;
+            });
+        }
+    
+        function BTC() {
+          fetch("https://api.coinbase.com/v2/exchange-rates?currency=BTC")
+            .then((response) => response.json())
+            .then((data) => {
+              const rates = data.data.rates;
+              let table =
+                '<h2>Exchange Rates for BTC</h2><table border="1"><tr><th>Currency</th><th>Rate</th></tr>';
+              let count = 0;
+              for (const currency in rates) {
+                if (rates.hasOwnProperty(currency)) {
+                  table += `<tr><td>${currency}</td><td>${rates[currency]}</td></tr>`;
+                  count++;
+                  if (count === 10) {
+                    break;
+                  }
+                }
+              }
+    
+              table += "</table>";
+              document.getElementById("btc_table").innerHTML = table;
+            })
+            .catch((error) => console.error("Error fetching data:", error));
+        }
+        setInterval(BTC, 30000);
+        BTC();
+      </script>
 </body>
 
 </html>
